@@ -18,9 +18,7 @@ namespace ExpenseSplitterAPI.Controllers
             _db = db;
         }
 
-        // POST /api/personalexpense
-        // Frontend expense.html sends: { title, amount }
-        // We map title → Description, amount → Amount
+       
         [HttpPost]
         public IActionResult AddExpense([FromBody] AddExpenseRequest req)
         {
@@ -40,8 +38,7 @@ namespace ExpenseSplitterAPI.Controllers
             return Ok(new { message = "Expense added!", expense.ExpenseID });
         }
 
-        // GET /api/personalexpense
-        // Returns all expenses paid by the logged-in user
+       
         [HttpGet]
         public IActionResult GetMyExpenses()
         {
