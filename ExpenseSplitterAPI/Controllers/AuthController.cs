@@ -21,15 +21,14 @@ namespace ExpenseSplitterAPI.Controllers
             _config = config;
         }
 
-        // POST /api/auth/register
-        // Frontend register.html sends: { name, email, password }
+     
         [HttpPost("register")]
         public IActionResult Register([FromBody] RegisterRequest req)
         {
             if (_db.Users.Any(u => u.Email == req.Email))
                 return BadRequest(new { message = "Email already registered." });
 
-            // Plain int password — matching Disha's database
+           
             var user = new User
             {
                 Name = req.Name,
@@ -43,13 +42,10 @@ namespace ExpenseSplitterAPI.Controllers
             return Ok(new { message = "Registered successfully!" });
         }
 
-        // POST /api/auth/login
-        // Frontend login.html sends: { email, password }
-        // Returns: { token } — saved in localStorage by the frontend
+       
         [HttpPost("login")]
         public IActionResult Login([FromBody] LoginRequest req)
         {
-            // Plain text comparison — no BCrypt
             var user = _db.Users.FirstOrDefault(
                 u => u.Email == req.Email && u.Password == req.Password);
 
