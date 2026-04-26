@@ -18,15 +18,12 @@ namespace ExpenseSplitterAPI.Controllers
             _db = db;
         }
 
-        // POST /api/splitexpense
-        // Frontend split.html sends: { description, totalAmount, groupID }
-        // This creates the expense then splits it equally among group members
+        
         [HttpPost]
         public IActionResult CreateSplit    ([FromBody] SplitExpenseRequest req)
         {
             var userID = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
-            // Step 1: Save the main expense first
             var expense = new Expense
             {
                 GroupID = req.GroupID,
@@ -38,7 +35,6 @@ namespace ExpenseSplitterAPI.Controllers
             _db.Expenses.Add(expense);
             _db.SaveChanges();
 
-            // Step 2: Find all members of this group
             var memberIDs = _db.GroupMembers
                                .Where(gm => gm.GroupID == req.GroupID)
                                .Select(gm => gm.UserID)
@@ -47,21 +43,19 @@ namespace ExpenseSplitterAPI.Controllers
             if (memberIDs.Count == 0)
                 return BadRequest(new { message = "No members found in this group." });
 
-            // Step 3: Split the total equally
             decimal sharePerPerson = req.TotalAmount / memberIDs.Count;
 
-            // Step 4: Create a split record for each member (except the payer)
             foreach (var memberID in memberIDs)
             {
-                if (memberID == userID) continue;  // payer doesn't owe themselves
+                if (memberID == userID) continue; 
 
                 var split = new ExpenseSplit
                 {
                     ExpenseID = expense.ExpenseID,
                     UserID = memberID,
                     AmountOwed = sharePerPerson,
-                    FromUser = memberID,   // this person owes
-                    ToUser = userID      // to the person who paid
+                    FromUser = memberID,   
+                    ToUser = userID      
                 };
 
                 _db.ExpenseSplit.Add(split);
@@ -79,8 +73,7 @@ namespace ExpenseSplitterAPI.Controllers
             });
         }
 
-        // GET /api/splitexpense
-        // Returns all amounts the logged-in user owes to others
+       
         [HttpGet]
         public IActionResult GetMySplits()
         {
