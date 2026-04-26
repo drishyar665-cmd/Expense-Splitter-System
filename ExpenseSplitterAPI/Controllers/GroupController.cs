@@ -18,14 +18,12 @@ namespace ExpenseSplitterAPI.Controllers
             _db = db;
         }
 
-        // POST /api/group
-        // Frontend group.html sends: { name }
+       
         [HttpPost]
         public IActionResult CreateGroup([FromBody] CreateGroupRequest req)
         {
             var userID = int.Parse(User.FindFirstValue(ClaimTypes.NameIdentifier)!);
 
-            // Create the group
             var group = new Group
             {
                 GroupName = req.Name,
@@ -35,7 +33,6 @@ namespace ExpenseSplitterAPI.Controllers
             _db.Groups.Add(group);
             _db.SaveChanges();
 
-            // Also add the creator as a member of their own group
             var member = new GroupMember
             {
                 GroupID = group.GroupID,
@@ -48,8 +45,7 @@ namespace ExpenseSplitterAPI.Controllers
             return Ok(new { message = "Group created!", group.GroupID, group.GroupName });
         }
 
-        // GET /api/group
-        // Returns all groups the logged-in user belongs to
+       
         [HttpGet]
         public IActionResult GetMyGroups()
         {
