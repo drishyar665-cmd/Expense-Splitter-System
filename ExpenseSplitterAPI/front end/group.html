@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Create Group</title>
+<style>
+body { font-family:Arial; background:#eef; display:flex; justify-content:center; align-items:center; height:100vh;}
+.container { background:white; padding:30px; border-radius:12px; width:300px; text-align:center;}
+input, button { width:100%; padding:10px; margin:10px 0; border-radius:8px;}
+button { background:#667eea; color:white; border:none;}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+<h2>Create Group</h2>
+
+<input id="groupName" placeholder="Group Name">
+<button onclick="createGroup()">Create</button>
+
+</div>
+
+<script>
+async function createGroup(){
+    const token = localStorage.getItem("token");
+
+    await fetch("https://localhost:5001/api/group",{
+        method:"POST",
+        headers:{
+            "Content-Type":"application/json",
+            "Authorization":"Bearer "+token
+        },
+        body: JSON.stringify({ name: groupName.value })
+    });
+
+    alert("Group created!");
+}
+</script>
+
+</body>
+</html>

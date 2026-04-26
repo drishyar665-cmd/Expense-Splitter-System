@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Register</title>
+<style>
+body {
+    font-family: Arial;
+    background: linear-gradient(to right, #ff7e5f, #feb47b);
+    display:flex; justify-content:center; align-items:center;
+    height:100vh;
+}
+.container {
+    background:white; padding:30px; border-radius:12px;
+    width:300px; text-align:center;
+}
+input, button {
+    width:100%; padding:10px; margin:8px 0;
+    border-radius:8px; border:1px solid #ccc;
+}
+button { background:#ff7e5f; color:white; border:none; }
+</style>
+</head>
+
+<body>
+<div class="container">
+<h2>Create Account</h2>
+
+<input type="text" id="name" placeholder="Name">
+<input type="email" id="email" placeholder="Email">
+<input type="password" id="password" placeholder="Password">
+
+<button onclick="register()">Register</button>
+</div>
+
+<script>
+async function register(){
+    await fetch("https://localhost:5001/api/auth/register",{
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body: JSON.stringify({
+            name:name.value,
+            email:email.value,
+            password:password.value
+        })
+    });
+
+    alert("Registered!");
+    window.location.href="login.html";
+}
+</script>
+</body>
+</html>

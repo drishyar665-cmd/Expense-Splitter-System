@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Login</title>
+<style>
+body {
+    font-family: Arial;
+    background: linear-gradient(to right, #667eea, #764ba2);
+    display:flex; justify-content:center; align-items:center;
+    height:100vh;
+}
+.container {
+    background:white; padding:30px; border-radius:12px;
+    width:300px; text-align:center;
+}
+input, button {
+    width:100%; padding:10px; margin:8px 0;
+    border-radius:8px; border:1px solid #ccc;
+}
+button { background:#667eea; color:white; border:none; }
+</style>
+</head>
+
+<body>
+<div class="container">
+<h2>💸 Expense Splitter</h2>
+
+<input type="email" id="email" placeholder="Email">
+<input type="password" id="password" placeholder="Password">
+
+<button onclick="login()">Login</button>
+<a href="register.html">Create Account</a>
+</div>
+
+<script>
+async function login() {
+    const res = await fetch("https://localhost:44367/api/Auth/login", {
+        method:"POST",
+        headers:{"Content-Type":"application/json"},
+        body: JSON.stringify({
+            email: email.value,
+            password: password.value
+        })
+    });
+
+    const data = await res.json();
+
+    if(res.ok){
+        localStorage.setItem("token", data.token);
+        window.location.href="dashboard.html";
+    } else alert("Login failed");
+}
+</script>
+</body>
+</html>

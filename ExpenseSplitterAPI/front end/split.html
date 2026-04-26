@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Split Expense</title>
+<style>
+body { font-family:Arial; background:#eef; display:flex; justify-content:center; align-items:center; height:100vh;}
+.container { background:white; padding:30px; border-radius:12px; width:300px; text-align:center;}
+input, button { width:100%; padding:10px; margin:10px 0; border-radius:8px;}
+button { background:#dc3545; color:white; border:none;}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+<h2>Split Expense</h2>
+
+<input id="desc" placeholder="Description">
+<input id="amount" type="number" placeholder="Amount">
+
+<button onclick="splitExpense()">Split</button>
+</div>
+
+<script>
+async function splitExpense(){
+    const token = localStorage.getItem("token");
+
+    await fetch("https://localhost:5001/api/splitexpense",{
+        method:"POST",
+        headers:{
+            "Content-Type":"application/json",
+            "Authorization":"Bearer "+token
+        },
+        body: JSON.stringify({
+            description:desc.value,
+            totalAmount:amount.value
+        })
+    });
+
+    alert("Split done!");
+}
+</script>
+
+</body>
+</html>
